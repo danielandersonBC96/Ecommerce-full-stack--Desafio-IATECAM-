@@ -1,27 +1,22 @@
-# app/main.py (adição de WebSocket)
+from typing import Union
+
 from fastapi import FastAPI
+from app.Routers import tag, auth, output, storage, analytics, sse
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import auth, category, product, sale
-from fastapi.websockets import WebSocket
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://localhost:4200"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-app.include_router(auth.router, prefix="/auth", tags=["auth"])
-app.include_router(category.router, prefix="/categories", tags=["categories"])
-app.include_router(product.router, prefix="/products", tags=["products"])
-app.include_router(sale.router, prefix="/sales", tags=["sales"])
-
-@app.websocket("/ws")
-async def websocket_endpoint(websocket: WebSocket):
-    await websocket.accept()
-    while True:
-        data = await websocket.receive_text()
-        await websocket.send_text(f"Message text was: {data}")
+app.include_router(auth.router)
+app.include_router(analytics.router)
+app.include_router(tag.router)
+app.include_router(output.router)
+app.include_router(storage.router)
+app.include_router(sse.router)
