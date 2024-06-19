@@ -8,11 +8,15 @@ from app.services.sales_by_tag import SalesByTagService
 from app.schemas.sales_by_tag import SalesByTag
 from app.middlewares.auth import get_current_user
 
+#Intace of the Analitics  service to handle business logic
+auth_service = AuthService()
+
 router = APIRouter(
     prefix="/analytics",
     tags=["Analytics"]
 )
 
+#Create endpoint for ales data grouped by product.
 @router.get("/sales/by/product", response_model=List[SalesByProduct])
 def get_sales_by_product(
     db: Session = Depends(get_db), 
@@ -27,6 +31,7 @@ def get_sales_by_product(
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+#Create endpoint for sales data grouped by tag.
 @router.get("/sales/by/tag", response_model=List[SalesByTag])
 def get_sales_by_tag(
     db: Session = Depends(get_db), 

@@ -7,11 +7,14 @@ from app.schemas.tag import Tag, CreateTag
 from app.middlewares.auth import get_current_user
 from app.routers.sse import sse_manager
 
+#Intace of the Tag  service to handle business logic
 router = APIRouter(
     prefix="/tags",
     tags=["Tags"]
 )
 
+
+#Create endpointe for creating a new tag.
 @router.post("/", response_model=Tag, status_code=status.HTTP_201_CREATED)
 def create_tag(
     tag: CreateTag, 
@@ -33,6 +36,7 @@ def create_tag(
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+#Create endpoint for retrieve a all tags 
 @router.get("/", response_model=List[Tag])
 def get_all_tags(
     db: Session = Depends(get_db), 

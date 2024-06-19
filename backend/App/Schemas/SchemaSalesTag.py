@@ -1,16 +1,25 @@
 from pydantic import BaseModel
 from app.schemas.tag import Tag
 
+class SalesByTagBase(BaseModel):
+    """
+    Base schema for SalesByTag containing common fields.
+    """
+    amount: int
 
-class salesByBase(BaseModel):
-    amount:int
-
-class CreateSalesByTag(CreateSalesByTag):
-    tag_id: int 
+class CreateSalesByTag(SalesByTagBase):
+    """
+    Schema for creating a new SalesByTag entry. 
+    Inherits common fields from SalesByTagBase and adds the tag_id.
+    """
+    tag_id: int
 
 class SalesByTag(SalesByTagBase):
-    id:  tag
+    """
+    Detailed schema for SalesByTag including additional fields like id and the associated tag.
+    """
+    id: int
     tag: Tag
 
     class Config:
-         orm_mode = True
+        orm_mode = True  # Enable compatibility with ORM models
