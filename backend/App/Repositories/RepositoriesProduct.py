@@ -21,11 +21,6 @@ class ProductRepository(AbstractRepository[ProductModel]):
         """
         Create a new product.
 
-        Args:
-            product (CreateProduct): Data for creating the product.
-
-        Returns:
-            Product: Created Product entity.
         """
         try:
             entity = ProductModel(name=product.name)
@@ -38,11 +33,6 @@ class ProductRepository(AbstractRepository[ProductModel]):
         """
         Retrieve a product by its ID.
 
-        Args:
-            product_id (int): ID of the product.
-
-        Returns:
-            Product: Product entity matching the ID.
         """
         try:
             return self._get(product_id)
@@ -53,12 +43,6 @@ class ProductRepository(AbstractRepository[ProductModel]):
         """
         Update a product by its ID.
 
-        Args:
-            product_id (int): ID of the product to update.
-            updated_product (UpdateProduct): Data for updating the product.
-
-        Returns:
-            Product: Updated Product entity.
         """
         try:
             product = self._get(product_id)
@@ -74,8 +58,6 @@ class ProductRepository(AbstractRepository[ProductModel]):
         """
         Retrieve all products.
 
-        Returns:
-            List[Product]: List of all Product entities.
         """
         try:
             return self._get_all()
@@ -86,11 +68,6 @@ class ProductRepository(AbstractRepository[ProductModel]):
         """
         Retrieve a product by its name.
 
-        Args:
-            value (str): Name of the product to retrieve.
-
-        Returns:
-            Product: Product entity matching the name.
         """
         try:
             return self._search_one_with("name", value)

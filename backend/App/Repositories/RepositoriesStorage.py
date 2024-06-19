@@ -6,11 +6,13 @@ from app.schemas.sales_by_tag import SalesByTag, CreateSalesByTag
 
 
 class SalesByTagRepository(AbstractRepository[SalesByTagModel]):
+    
     """
     Repository class for handling CRUD operations related to SalesByTag entities.
     """
 
     def __init__(self, db: Session):
+
         """
         Initializes the SalesByTagRepository with a database session.
 
@@ -19,10 +21,12 @@ class SalesByTagRepository(AbstractRepository[SalesByTagModel]):
         self.model = SalesByTagModel
 
     def create_sales_by_tag(self, sales: CreateSalesByTag) -> SalesByTag:
+
         """
         Create a new sales by tag record.
 
         """
+
         try:
             entity = SalesByTagModel(
                 tag_id=sales.tag_id,
@@ -33,15 +37,24 @@ class SalesByTagRepository(AbstractRepository[SalesByTagModel]):
             self._db.rollback()
             raise e
 
-    def get_sale_by_tag_id(self, tag_id: int) -> SalesByTag:
-       
+        def get_sale_by_tag_id(self, tag_id: int) -> SalesByTag:
+
+        """
+        Retrieve a sales by tag record by its tag ID.
+
+        """
         try:
             return self._search_one_with("tag_id", tag_id)
         except Exception as e:
             raise e
 
-    def get_sales_by_tag(self) -> List[SalesByTag]:
-       
+
+        def get_sales_by_tag(self) -> List[SalesByTag]:
+    
+        """
+         Retrieve all sales by tag records.
+   
+        """
         try:
             return self._get_all()
         except Exception as e:

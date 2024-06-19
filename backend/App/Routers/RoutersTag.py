@@ -1,28 +1,49 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-
-from app.config.database import get_db
-from app.services.sales_by_product import SalesByProductService
-
-from app.schemas.sales_by_product import SalesByProduct
 from typing import List
-
-from app.schemas.sales_by_tag import SalesByTag
-
-from app.services.sales_by_tag import SalesByTagService
-
+from app.config.database import get_db
+from app.services.tag import TagService
+from app.schemas.tag import Tag, CreateTag
 from app.middlewares.auth import get_current_user
-
+from app.routers.sse import sse_manager
 
 router = APIRouter(
-    prefix ='/analytics',
-    tags=[ "Analytics"]
+    prefix="/tags",
+    tags=["Tags"]
 )
 
-@router.get("/sales/by/product", response_model=List[SalesByProduct ])
-def get_sales_By_product( db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)) -> List[SalesByProduct]:
-    return SalesByProductService(db).get_sales_By_product()
+@router.post("/", response_model=Tag, status_code=status.HTTP_201_CREATED)
+def create_tag(
+    tag: CreateTag, 
+    db: Session = Depends(get_db), 
+    current_user: dict = Depends(get_current_user)
+) -> Tag:
+    """
+    Create a new tag.
 
-@router.get("/sales/by/tag", response_model=List[SalesByTag])
-def get_sales_By_tag(db: Session = Depends(get_db),current_user:disct = Depends(get_current_user)) -> List[SalesByTag]:
-    return sales_by_tag_service(db).get_sales_By_tag()
+    """
+    try:
+        tag_data = TagService(db).create_tag(tag=tag)
+        
+        event_data = "tag_created"
+        sse_manager.register_event_data(event_data)
+        sse_manager.send_event(event_data)
+        
+        return tag_data
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@router.get("/", response_model=List[Tag])
+def get_all_tags(
+    db: Session = Depends(get_db), 
+    current_user: dict = Depends(get_current_user)
+) -> List[Tag]:
+    """
+    Retrieve all tags.
+
+    """
+    try:
+        return TagService(db).get_all_tags()
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+

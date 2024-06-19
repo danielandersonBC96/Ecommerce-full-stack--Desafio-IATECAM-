@@ -1,25 +1,37 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from datetime import timedelta
-from app import schemas, models, crud
-from app.database import get_db
-from app.core.security import create_access_token, verify_password, get_password_hash
+from app.config.database import get_db
+from app.services.auth import AuthService
+from app.schemas.auth import LoginUser, RegisterUser
+from app.schemas.user import User
+from fastapi.security import OAuth2PasswordRequestForm
 
+#Create a new router to group related to authentication
 router = APIRouter()
 
-@router.post("/token", response_model=schemas.Token)
-def login_for_access_token(form_data: schemas.LoginForm, db: Session = Depends(get_db)):
-    user = crud.get_user_by_username(db, username=form_data.username)
-    if not user or not verify_password(form_data.password, user.hashed_password):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={"sub": user.username}, expires_delta=access_token_expires
-    )
-    return {"access_token": access_token, "token_type": "bearer"}
+#Intace of the authentication service to handle business logic
+auth_service = AuthService()
 
-        
+#Endipoint for user authentication via POST/auth/login
+@router.post("/login")
+def login( form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    
+    try:
+        # Create a LoginUser object base on the data received in the form 
+        user_data = LoginUser(username=form_data.username, password=form_data,password)
+        #Call the login_user methodo of AuthService to autenticate the user
+        return auth_service.login_user(db,user_data)
+    except Exception as e:
+        # Handle generic expecption returnig an HTTP 500 with erro details 
+        raise HTTPException( status_code=500, detail=str(e))
+
+#Endpoint for registering a new user via POST/auth/register
+@router.POST('/registe',response_model=User)
+def register(user:RegisterUser, db:Session = Depends(get_db))
+
+    try:
+        #call the register_user method of AuthService to register a new user     
+        return auth_service.register_user(db,user)
+    except Exception as e:
+        # handel generic expections returning an HTTP 500 with error details
+        raise HTTPException(status_code,detail=str(e))
