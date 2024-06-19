@@ -1,10 +1,10 @@
 from fastapi import HTTPException
 from app.services.user import UserService
-from app.schemas.user import CreateUser
-from app.schemas.auth import RegisterUser, LoginUser
-from app.utils.hash import Hash
-from app.utils.jwt import JWTManager
-from app.config.session import AppService
+from App.Schemas.SchemasUser import CreateUser
+from App.Schemas.SchemasAuth import RegisterUser, LoginUser
+from App.Utils.Utils_Hash import Hash
+from App.Utils.Utils_jwt import JWTManager
+from App.config.session import AppService
 
 class AuthService(AppService):
     def register_user(self, user: RegisterUser) -> CreateUser:

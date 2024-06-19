@@ -1,17 +1,17 @@
 from fastapi import HTTPException, Response
 from typing import List
 
-from app.schemas.storage import Storage, CreateStorage, UpdateStorage, StorageBase, RequestStorage
-from app.schemas.product import CreateProduct
-from app.schemas.tag import CreateTag
+from App.Schemas.SchemasStorage import Storage, CreateStorage, UpdateStorage, StorageBase, RequestStorage
+from App.Schemas.SchemaProduct import CreateProduct
+from App.Schemas.SchemaTag import CreateTag
 
-from app.repositories.storage import StorageRepository
+from App.Repositories.RepositoriesStorage import StorageRepository
 from sqlalchemy.orm import Session
 
-from app.services.product import ProductService
-from app.services.tag import TagService
+from App.Service.ServiceProduct import ProductService
+from App.ServiceTag.tag import TagService
 
-from app.config.session import AppService
+from App.config.session import AppService
 
 class StorageService(AppService):
     """

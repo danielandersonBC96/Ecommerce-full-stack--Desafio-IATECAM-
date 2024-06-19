@@ -1,12 +1,12 @@
 from fastapi import HTTPException, Response
 from typing import List
 
-from app.schemas.output import Output, CreateOutput
-from app.repositories.output import OutputRepository
-from app.services.storage import StorageService
-from app.services.sales_by_tag import SalesByTagService
-from app.services.sales_by_product import SalesByProductService
-from app.config.session import AppService
+from App.Schemas.SchemaOutput import Output, CreateOutput
+from App.Repositories.RepositoriesOutput import OutputRepository
+from App.Service.ServiceStorage import StorageService
+from App.Service.ServiceTag import SalesByTagService
+from App.Service.ServiceSalesProduct import SalesByProductService
+from App.config.session import AppService
 
 class OutputService(AppService):
     """

@@ -1,10 +1,10 @@
 from sqlalchemy import Column, String, Integer, ForeignKey, Float
 from sqlalchemy.orm import relationship
 from app.config.database import Base
-from app.models.product import Product  # Import Product model if not already imported
-from app.models.tag import Tag  # Import Tag model if not already imported
-from app.models.user import User  # Import User model if not already imported
-from app.models.output import Output  # Import Output model if not already imported
+from App.Models.ModelsProduct import Product  # Import Product model if not already imported
+from App.Models.ModelsTag import Tag  # Import Tag model if not already imported
+from App.Models.ModelsUser import User  # Import User model if not already imported
+from App.Models.ModelsOutput import Output  # Import Output model if not already imported
 
 class Storage(Base):
     """

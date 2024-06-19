@@ -1,6 +1,6 @@
 from fastapi import HTTPException, Response
-from app.schemas.product import Product, CreateProduct, UpdateProduct
-from app.repositories.product import ProductRepository
+from App.Schemas.SchemaProduct import Product, CreateProduct, UpdateProduct
+from App.Repositories.RepositoriesProduct import ProductRepository
 from sqlalchemy.orm import Session
 from typing import List
 

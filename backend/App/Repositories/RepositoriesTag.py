@@ -1,8 +1,8 @@
 from typing import List
 from sqlalchemy.orm import Session
-from app.models.storage import Storage as StorageModel
-from app.repositories.main import AbstractRepository
-from app.schemas.storage import Storage, CreateStorage, UpdateStorage
+from App.Models.ModelsStorage import Storage as StorageModel
+from App.Repositories.main import AbstractRepository
+from App.Schemas. SchemaStorage import Storage, CreateStorage, UpdateStorage
 
 
 class StorageRepository(AbstractRepository[StorageModel]):

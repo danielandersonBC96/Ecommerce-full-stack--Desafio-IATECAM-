@@ -1,6 +1,6 @@
 from app.config.session import AppService
-from app.schemas.sales_by_product import CreateSalesByProduct, SalesByProduct
-from app.repositories.sales_by_product import SalesByProductRepository
+from App.Schemas.SchemaSalesProduct import CreateSalesByProduct, SalesByProduct
+from App.Repositories.RepositoriesProduct import SalesByProductRepository
 from typing import List
 
 class SalesByProductService(AppService):

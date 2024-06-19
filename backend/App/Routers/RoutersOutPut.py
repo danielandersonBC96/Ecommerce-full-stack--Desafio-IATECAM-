@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, Path
 from sqlalchemy.orm import Session
 from typing import List
-from app.config.database import get_db
-from app.services.output import OutputService
-from app.schemas.output import Output, CreateOutput
-from app.middlewares.auth import get_current_user
+from App.config.database import get_db
+from App.Service.ServiceOutput import OutputService
+from App.Schemas.SchemaOutput import Output, CreateOutput
+from App.Middlewares.MiddlewaresAuth import get_current_user
 
 # Crate a new APIRouter instace for outputs
 

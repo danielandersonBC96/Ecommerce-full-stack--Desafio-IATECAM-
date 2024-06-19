@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer, ForeignKey, DateTime
 from datetime import datetime
 from sqlalchemy.orm import relationship
-from app.config.database import Base
-from app.models.tag import Tag  # Import Tag model if not already imported
+from App.config.database import Base
+from App.Models.ModelstTag import Tag  # Import Tag model if not already imported
 
 class SalesByTag(Base):
     """

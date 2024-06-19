@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
-from app.config.database import get_db
-from app.services.tag import TagService
-from app.schemas.tag import Tag, CreateTag
-from app.middlewares.auth import get_current_user
-from app.routers.sse import sse_manager
+from App.config.database import get_db
+from App.ServiceTag.tag import TagService
+from App.SchemasStorage.tag import Tag, CreateTag
+from App.Middlewares.MiddlewaresAuth import get_current_user
+from App.Routers.RoutersSSEConnection import sse_manager
 
 #Intace of the Tag  service to handle business logic
 router = APIRouter(

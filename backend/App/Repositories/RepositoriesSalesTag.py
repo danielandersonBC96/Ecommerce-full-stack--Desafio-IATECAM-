@@ -1,8 +1,8 @@
 from typing import List
 from sqlalchemy.orm import Session
-from app.models.sales_by_tag import SalesByTag as SalesByTagModel
-from app.repositories.main import AbstractRepository
-from app.schemas.sales_by_tag import SalesByTag, CreateSalesByTag
+from App.Models.ModelsTag import SalesByTag as SalesByTagModel
+from App.Repositories.main import AbstractRepository
+from App.Schemas.SchemaTag import SalesByTag, CreateSalesByTag
 
 
 class SalesByTagRepository(AbstractRepository[SalesByTagModel]):

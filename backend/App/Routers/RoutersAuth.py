@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from app.config.database import get_db
-from app.services.auth import AuthService
-from app.schemas.auth import LoginUser, RegisterUser
-from app.schemas.user import User
+from App.config.database import get_db
+from App.Service.ServiceAuth import AuthService
+from App.Schemas.SchemaAuth import LoginUser, RegisterUser
+from app.Schemas.SchemaUser import User
 from fastapi.security import OAuth2PasswordRequestForm
 
 #Create a new router to group related to authentication

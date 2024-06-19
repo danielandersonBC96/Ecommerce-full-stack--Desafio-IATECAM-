@@ -1,9 +1,9 @@
 from typing import List
 from sqlalchemy.orm import Session
-from app.models.user import User as UserModel
-from app.repositories.main import AbstractRepository
-from app.schemas.user import User, CreateUser, UpdateUser
-from app.schemas.auth import UserCredentials
+from App.Models.ModelsUser import User as UserModel
+from app.Repositories.main import AbstractRepository
+from app.SchemasUser. SchemaUser import User, CreateUser, UpdateUser
+from app.Schemas.SchemasAuth import UserCredentials
 
 
 class UserRepository(AbstractRepository[UserModel]):

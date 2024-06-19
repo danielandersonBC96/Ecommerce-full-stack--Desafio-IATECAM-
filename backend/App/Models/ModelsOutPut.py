@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, ForeignKey, DateTime
 from datetime import datetime
 from sqlalchemy.orm import relationship
-from app.config.database import Base
+from App.config.database import Base
 
 class Output(Base):
     """

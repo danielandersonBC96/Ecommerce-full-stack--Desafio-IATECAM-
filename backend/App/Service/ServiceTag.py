@@ -1,6 +1,6 @@
-from app.config.session import AppService
-from app.schemas.sales_by_tag import CreateSalesByTag, SalesByTag
-from app.repositories.sales_by_tag import SalesByTagRepository
+from App.config.session import AppService
+from App.Schemas.SchemaSalesTag import CreateSalesByTag, SalesByTag
+from App.Repositories.RepositoriesSalesTag import SalesByTagRepository
 from typing import List
 from fastapi import HTTPException
 

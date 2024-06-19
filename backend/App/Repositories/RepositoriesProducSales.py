@@ -1,8 +1,8 @@
 from typing import List
 from sqlalchemy.orm import Session
-from app.models.sales_by_product import SalesByProduct as SalesByProductModel
-from app.repositories.main import AbstractRepository
-from app.schemas.sales_by_product import SalesByProduct, CreateSalesByProduct
+from App.Models.ModelsProduct import SalesByProduct as SalesByProductModel
+from App.Repositories.main import AbstractRepository
+from App.Schemas.SchemaSalesProduct import SalesByProduct, CreateSalesByProduct
 
 
 class SalesByProductRepository(AbstractRepository[SalesByProductModel]):

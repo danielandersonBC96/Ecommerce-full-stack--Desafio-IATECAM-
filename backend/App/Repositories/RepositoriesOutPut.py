@@ -1,8 +1,8 @@
 from typing import List
 from sqlalchemy.orm import Session
-from app.models.output import Output as OutputModel
-from app.repositories.main import AbstractRepository
-from app.schemas.output import Output, CreateOutput
+from App.Models.ModelsOutput import Output as OutputModel
+from App.Repositories.main import AbstractRepository
+from App.Schemas.SchemaOutput import Output, CreateOutput
 
 
 class OutputRepository(AbstractRepository[OutputModel]):

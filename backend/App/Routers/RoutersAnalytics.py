@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
-from app.config.database import get_db
-from app.services.sales_by_product import SalesByProductService
-from app.schemas.sales_by_product import SalesByProduct
-from app.services.sales_by_tag import SalesByTagService
-from app.schemas.sales_by_tag import SalesByTag
-from app.middlewares.auth import get_current_user
+from App.config.database import get_db
+from App.Service.ServiceSalesProdutuct import SalesByProductService
+from App.Schemas.SchemaSalesProduct import SalesByProduct
+from App.Service.SchemaSalesTag import SalesByTagService
+from App.Schemas.SchemaSalesTag import SalesByTag
+from App.Middlewares.MiddlewaresAuth import get_current_user
 
 #Intace of the Analitics  service to handle business logic
 auth_service = AuthService()

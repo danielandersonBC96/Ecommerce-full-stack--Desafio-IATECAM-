@@ -1,5 +1,5 @@
 from fastapi import FastAPI, APIRouter, HTTPException
-from app.utils.sse import sse_manager
+from App.Utils.Utils_sse import sse_manager
 
 # Create a FastAPI application instance
 app = FastAPI()

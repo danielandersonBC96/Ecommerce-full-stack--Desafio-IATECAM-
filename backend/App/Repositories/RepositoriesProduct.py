@@ -1,8 +1,8 @@
 from typing import List
 from sqlalchemy.orm import Session
-from app.models.product import Product as ProductModel
-from app.repositories.main import AbstractRepository
-from app.schemas.product import Product, CreateProduct, UpdateProduct
+from App.Models.ModelsProduct import Product as ProductModel
+from App.Repositories.main import AbstractRepository
+from App.Schemas.SchemaProduct import Product, CreateProduct, UpdateProduct
 
 
 class ProductRepository(AbstractRepository[ProductModel]):
