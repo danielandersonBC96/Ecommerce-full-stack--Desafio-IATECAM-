@@ -1,33 +1,48 @@
-from sqlalchemy.orm import Session, joinedload
-from app.models.storage import Storage as StorageModel
-from app.repositories.main import AbstractRepository
-from app.schemas.storage import Storage, CreateStorage, UpdateStorage, StorageBase
-
 from typing import List
-
+from sqlalchemy.orm import Session
 from app.models.sales_by_tag import SalesByTag as SalesByTagModel
-
+from app.repositories.main import AbstractRepository
 from app.schemas.sales_by_tag import SalesByTag, CreateSalesByTag
 
-from app.repositories.main import AbstractRepository
-from sqlalchemy.orm import Session
-
-from typing import List
 
 class SalesByTagRepository(AbstractRepository[SalesByTagModel]):
+    """
+    Repository class for handling CRUD operations related to SalesByTag entities.
+    """
+
     def __init__(self, db: Session):
+        """
+        Initializes the SalesByTagRepository with a database session.
+
+        """
         super().__init__(db)
         self.model = SalesByTagModel
 
-    def create_sales_by_tag(self, sales: CreateSalesByTag):
-        entity = SalesByTagModel(
-            tag_id=sales.tag_id,
-            amount=0
-        )
-        return self._create(entity)
-    
+    def create_sales_by_tag(self, sales: CreateSalesByTag) -> SalesByTag:
+        """
+        Create a new sales by tag record.
+
+        """
+        try:
+            entity = SalesByTagModel(
+                tag_id=sales.tag_id,
+                amount=0  # Assuming the initial amount is 0, adjust as needed
+            )
+            return self._create(entity)
+        except Exception as e:
+            self._db.rollback()
+            raise e
+
     def get_sale_by_tag_id(self, tag_id: int) -> SalesByTag:
-        return self._search_one_with("tag_id", tag_id)
-    
+       
+        try:
+            return self._search_one_with("tag_id", tag_id)
+        except Exception as e:
+            raise e
+
     def get_sales_by_tag(self) -> List[SalesByTag]:
-        return self._get_all()
+       
+        try:
+            return self._get_all()
+        except Exception as e:
+            raise e

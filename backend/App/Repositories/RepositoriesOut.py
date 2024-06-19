@@ -1,35 +1,85 @@
+from typing import List
 from sqlalchemy.orm import Session
 from app.models.output import Output as OutputModel
 from app.repositories.main import AbstractRepository
 from app.schemas.output import Output, CreateOutput
 
-from typing import List
 
-class OutPutRepositoy(AbstractRepository[OutputModel]):
+class OutputRepository(AbstractRepository[OutputModel]):
+    """
+    Repository class for handling CRUD operations related to Output entities.
+    """
+
     def __init__(self, db: Session):
+        """
+        Initializes the OutputRepository with a database session.
+
+        """
         super().__init__(db)
-        self.models = OutputModel
-    
-    def create_output(self, user_id: int , output: CreateOutput) -> Output:
-        entity = OutputModel(
-             user_id=user_id,
-            storage_id=output.storage_id,
-            amount=output.amount,
-        )
-        return self._create(entity)
+        self.model = OutputModel
 
-    def get_out_by_id( self, output_id:int) -> Output:
-        return self._get(output_id)
+    def create_output(self, user_id: int, output: CreateOutput) -> Output:
+        """
+        Create a new Output record.
 
-    def delete_output_by_id(self, output: int) -> Output:
-        return self._delete(output_id)
-    
+        """
+        try:
+            entity = OutputModel(
+                user_id=user_id,
+                storage_id=output.storage_id,
+                amount=output.amount,
+            )
+            return self._create(entity)
+        except Exception as e:
+            self._db.rollback()
+            raise e
+
+    def get_output_by_id(self, output_id: int) -> Output:
+        """
+        Retrieve an Output record by its ID.
+.
+        """
+        try:
+            return self._get(output_id)
+        except Exception as e:
+            raise e
+
+    def delete_output_by_id(self, output_id: int) -> Output:
+        """
+        Delete an Output record by its ID.
+
+        """
+        try:
+            return self._delete(output_id)
+        except Exception as e:
+            self._db.rollback()
+            raise e
+
     def get_all_outputs(self) -> List[Output]:
-        return self._get_all()
-    
-    def get_all_outputs_by_user_idd(self, user_id: int) -> List[Output]:
-        return self._search_all_with("user_id", user_id)
-        
-     def get_last_outputs(self) -> List[Output]:
-        return self._get_last_n_records("created_at", 4)
-    
+        """
+        Retrieve all Output records.
+        """
+        try:
+            return self._get_all()
+        except Exception as e:
+            raise e
+
+    def get_outputs_by_user_id(self, user_id: int) -> List[Output]:
+        """
+        Retrieve all Output records associated with a user ID.
+
+        """
+        try:
+            return self._search_all_with("user_id", user_id)
+        except Exception as e:
+            raise e
+
+    def get_last_outputs(self, limit: int = 4) -> List[Output]:
+        """
+        Retrieve the last N Output records.
+
+        """
+        try:
+            return self._get_last_n_records("created_at", limit)
+        except Exception as e:
+            raise e
