@@ -50,3 +50,6 @@ class UserRepository:
         if not user or not Hash.verify(password, user.hashed_password):
             raise HTTPException(status_code=401, detail="Invalid username or password")
         return user
+
+
+ 

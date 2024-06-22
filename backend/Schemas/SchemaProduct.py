@@ -6,7 +6,8 @@ class ProductBase(BaseModel):
     description: str
     quantity_in_stock: int
     price_in_real: float
-    category_id: int
+    category_id: str
+    image_url: Optional[str]  # Adicionando image_url como uma propriedade opcional
 
 class CreateProduct(ProductBase):
     pass

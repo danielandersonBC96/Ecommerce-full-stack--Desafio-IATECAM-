@@ -11,6 +11,7 @@ class Product(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     description = Column(Text)
+    image_url = Column(String)  # Coluna para armazenar a URL da imagem externa
     quantity_in_stock = Column(Integer)
     price_in_real = Column(Float)
     category_id = Column(Integer, ForeignKey('categories.id'))
@@ -26,8 +27,8 @@ class Product(Base):
         """
         return (
             f"<Product(id={self.id}, name={self.name}, description={self.description}, "
-            f"price_in_real={self.price_in_real}, category_id={self.category_id}, "
-            f"quantity_in_stock={self.quantity_in_stock})>"
+            f"image_url={self.image_url}, price_in_real={self.price_in_real}, "
+            f"category_id={self.category_id}, quantity_in_stock={self.quantity_in_stock})>"
         )
 
     def to_dict(self) -> dict:
@@ -38,7 +39,8 @@ class Product(Base):
             "id": self.id,
             "name": self.name,
             "description": self.description,
+            "image_url": self.image_url,
             "quantity_in_stock": self.quantity_in_stock,
             "price_in_real": self.price_in_real,
-            "category": self.category.name if self.category else None,
+            "category": self.category.name if self.category else None,  
         }
