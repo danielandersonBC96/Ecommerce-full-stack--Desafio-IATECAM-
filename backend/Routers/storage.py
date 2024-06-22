@@ -1,41 +1,58 @@
-from fastapi import APIRouter, Depends, HTTPException, Query
+
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
+
+
+from Schemas.SchemaProduct import Product, CreateProduct, UpdateProduct
 from Config.database import get_db
-from  Service.ServiceStorage import StorageService
-from  Schemas.SchemaStorage import Storage, CreateStorage, UpdateStorage, RequestStorage
-from Middlewares.MiddlewaresAuth import get_current_user
+from Repositories.RepositoriesProduct import ProductRepository
 
-router = APIRouter(
-    prefix="/storages",
-    tags=["Storage"]
-)
+router = APIRouter()
 
-# Endpoint to create a new storage entry
-@router.post("/", response_model=Storage, tags=["Storages"])
-def create_storage(storage_data: RequestStorage,db: Session = Depends(get_db),current_user: dict = Depends(get_current_user)):
-    """
-    Create a new storage entry.
 
-    """
-    return StorageService(db).create_storage(storage_data, current_user["user_id"])
 
-# Endpoint to get all storages owned by the current user
-@router.get("/by/me", response_model=List[Storage])
-def get_all_user_storages(db: Session = Depends(get_db),current_user: dict = Depends(get_current_user),skip: int = Query(0, description="Skip first N results for pagination"),limit: int = Query(10, description="Limit number of results per page")):
-    """
-    Retrieve all storages owned by the current user.
+# Fetch current USD to BRL exchange rate
 
-    """
-    return StorageService(db).get_all_storages_by_user_id(current_user["user_id"], skip=skip, limit=limit)
 
-# Endpoint to get all storages available for purchase by the current user
-@router.get("/to/me", response_model=List[Storage])
-def get_all_storages_to_buy(
-    db: Session = Depends(get_db), current_user: dict = Depends(get_current_user), skip: int = Query(0, description="Skip first N results for pagination"),limit: int = Query(10, description="Limit number of results per page")
-):
-    """
-    Retrieve all storages available for purchase by the current user.
-   
-    """
-    return StorageService(db).get_all_storages_to_buy(current_user["user_id"], skip=skip, limit=limit)
+@router.post("/", response_model=Product)
+def create_product(product_data: CreateProduct, db: Session = Depends(get_db)):
+    product_repo = ProductRepository(db)
+    created_product = product_repo.create_product(product_data)
+    return created_product
+
+
+@router.get("/", response_model=list[Product])
+def get_all_products(db: Session = Depends(get_db)):
+    product_repo = ProductRepository(db)
+    products = product_repo.get_all_products()
+
+    # Fetch current USD to BRL exchange rate
+    usd_brl_rate = fetch_usd_brl_rate()
+
+    for product in products:
+        product.price_in_dollar = product.price_in_real / usd_brl_rate
+
+    return products
+
+
+    for product in products:
+        product.price_in_dollar = product.price_in_real / usd_brl_rate
+    return products
+
+@router.put("/{product_id}", response_model=Product)
+def update_product(product_id: int, product_data: UpdateProduct, db: Session = Depends(get_db)):
+    product_repo = ProductRepository(db)
+    updated_product = product_repo.update_product(product_id, product_data.dict(exclude_unset=True))
+    if not updated_product:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return updated_product
+
+
+@router.put("/{product_id}", response_model=Product)
+def update_product(product_id: int, product_data: UpdateProduct, db: Session = Depends(get_db)):
+    product_repo = ProductRepository(db)
+    updated_product = product_repo.update_product(product_id, product_data)
+    if not updated_product:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return updated_product

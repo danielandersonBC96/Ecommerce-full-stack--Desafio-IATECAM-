@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Float
+from sqlalchemy import Column, Integer, String, Text, Float, ForeignKey
 from sqlalchemy.orm import relationship
 from Config.database import Base
 from Models.ModelsCategory import Category
@@ -8,16 +8,16 @@ class Product(Base):
     Model class representing products in the database.
     """
     __tablename__ = 'products'
-
     id = Column(Integer, primary_key=True, index=True)
-    description = Column(String, index=True, nullable=False)
-    price = Column(Float, nullable=False)
-    category_id = Column(Integer, ForeignKey('categories.id'), nullable=False)
-    quality = Column(Integer, nullable=False)
+    name = Column(String, index=True)
+    description = Column(Text)
+    quantity_in_stock = Column(Integer)
+    price_in_real = Column(Float)
+    category_id = Column(Integer, ForeignKey('categories.id'))
 
     # Define relationships
     category = relationship('Category', back_populates='products', lazy='joined')
-    storages = relationship('Storage', back_populates='product', lazy='joined')  # Relacionamento com Storage
+    storages = relationship('Storage', back_populates='product', lazy='joined')
     sales_by_product = relationship('SalesByProduct', back_populates='product', lazy='joined')
 
     def __repr__(self) -> str:
@@ -25,8 +25,9 @@ class Product(Base):
         Returns a string representation of the Product object.
         """
         return (
-            f"<Product(id={self.id}, description={self.description}, "
-            f"price={self.price}, category_id={self.category_id}, quality={self.quality})>"
+            f"<Product(id={self.id}, name={self.name}, description={self.description}, "
+            f"price_in_real={self.price_in_real}, category_id={self.category_id}, "
+            f"quantity_in_stock={self.quantity_in_stock})>"
         )
 
     def to_dict(self) -> dict:
@@ -35,8 +36,9 @@ class Product(Base):
         """
         return {
             "id": self.id,
+            "name": self.name,
             "description": self.description,
-            "price": self.price,
-            "category_id": self.category_id,
-            "quality": self.quality
+            "quantity_in_stock": self.quantity_in_stock,
+            "price_in_real": self.price_in_real,
+            "category": self.category.name if self.category else None,
         }
