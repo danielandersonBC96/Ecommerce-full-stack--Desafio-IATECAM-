@@ -5,7 +5,7 @@ from Repositories.main import AbstractRepository
 from Schemas.SchemaOutPut import Output, CreateOutput
 
 
-class OutputRepository(AbstractRepository[OutputModel]):
+class OutputRepository(AbstractRepository):
     """
     Repository class for handling CRUD operations related to Output entities.
     """

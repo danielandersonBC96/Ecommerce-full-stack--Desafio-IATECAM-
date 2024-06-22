@@ -2,7 +2,7 @@
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
 from Config.database import get_db, create_tables
-from Schemas.SchemaUser import User, CreateUser, UpdateUser
+from Schemas.SchemaUser import User, CreateUser, UpdateUser , UserLogin
 from Repositories.RepositoriesUser import UserRepository
 import jwt
 from datetime import datetime, timedelta
@@ -49,4 +49,8 @@ def update_user_by_username(username: str, updated_user: UpdateUser, db: Session
         raise HTTPException(status_code=404, detail=f"User '{username}' not found")
     return updated_user
 
-   
+@router.post("/login", response_model=User)
+def login(user_data: UserLogin, db: Session = Depends(get_db)):
+    user_repo = UserRepository(db)
+    user = user_repo.authenticate_user(user_data.username, user_data.password)
+    return user

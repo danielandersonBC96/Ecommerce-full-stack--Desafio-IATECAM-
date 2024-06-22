@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from Models.ModelsUser import User
-from Schemas.SchemaUser import CreateUser, UpdateUser
+from Schemas.SchemaUser import CreateUser, UpdateUser , UserLogin
 from Utils.Utils_Hash import Hash
 from Config.database import get_db
 
@@ -43,4 +43,10 @@ class UserRepository:
         
         self.db.commit()
         self.db.refresh(user)
+        return user
+
+    def authenticate_user(self, username: str, password: str) -> User:
+        user = self.get_user_by_username(username)
+        if not user or not Hash.verify(password, user.hashed_password):
+            raise HTTPException(status_code=401, detail="Invalid username or password")
         return user

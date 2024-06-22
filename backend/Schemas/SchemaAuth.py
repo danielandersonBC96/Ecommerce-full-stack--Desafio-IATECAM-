@@ -17,3 +17,6 @@ class RegisterUser(CreateUser):
 
 class UserCredentials(RegisterUser):
     id: int
+
+class Config:
+    orm_mode = True  # Enables compatibility with ORM models

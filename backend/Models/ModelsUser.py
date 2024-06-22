@@ -8,7 +8,7 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     
     username = Column(String, unique=True, nullable=False)
-    hashed_password = Column(String, nullable=False)
+    hashed_password = Column(String)
     name = Column(String)
     storages = relationship('Storage', back_populates='user', lazy='joined')
     outputs = relationship('Output', back_populates='user', lazy='joined', primaryjoin="User.id == Output.user_id")

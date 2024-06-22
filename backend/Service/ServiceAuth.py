@@ -27,28 +27,13 @@ class AuthService(UserService):
         )
         return UserService(self.db).create_user(user_data)
     
-    def login_user(self, user: LoginUser) -> dict:
-        """
-        Authenticates an existing user.
-
-        Args:
-            user (LoginUser): User data for login.
-
-        Returns:
-            dict: Access token generated upon successful authentication.
-        
-        Raises:
-            HTTPException: If user credentials are invalid.
-        """
+    def login_user(self, user: LoginUser):
         user_data = UserService(self.db).get_user_credentials(user.username)
 
-        if not user_data:
-            raise HTTPException(status_code=400, detail="User not found")
-        
         equal_passwords = Hash.compare_hash(user.password, user_data.password)
         
         if not equal_passwords:
-            raise HTTPException(status_code=400, detail="Incorrect password")
+            raise HTTPException(status_code=400, detail="Credentials are not valid")
         
         data = {
             "sub": user_data.username,
@@ -57,4 +42,7 @@ class AuthService(UserService):
 
         access_token = JWTManager().create_token(data)
 
+
         return { "access_token": access_token, "token_type": "bearer" }
+
+        
