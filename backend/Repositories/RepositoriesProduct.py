@@ -53,9 +53,12 @@ class ProductRepository:
         return query.all()
 
     
-    def reduce_stock(self, product_id: int, quantity: int):
-        # Obter o produto do banco de dados
-        product = self.get_product_by_id(product_id)
+    def get_product_by_name(self, product_name: str) -> Optional[Product]:
+        return self.db.query(Product).filter(Product.name == product_name).first()
+
+    def reduce_stock(self, product_name: str, quantity: int) -> Product:
+        # Obter o produto do banco de dados pelo nome
+        product = self.get_product_by_name(product_name)
 
         if not product:
             raise ValueError("Produto não encontrado")
@@ -81,4 +84,4 @@ class ProductRepository:
             self.db.commit()
 
         # Retornar o produto atualizado
-        return product
+        return product 

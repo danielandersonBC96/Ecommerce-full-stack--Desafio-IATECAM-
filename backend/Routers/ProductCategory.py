@@ -121,13 +121,12 @@ def search_products(category_id: Optional[str] = None, description: Optional[str
     products = product_repo.search_products_by_criteria(category_ids, description)
     return products
 
-
-@router.post("/products/{product_name}/purchase", response_model=Product)
+@router.post("/{product_name}/purchase", response_model=Product)
 def purchase_product_by_name(product_name: str, purchase_data: PurchaseProduct, db: Session = Depends(get_db)):
     product_repo = ProductRepository(db)
 
     # Buscar o produto pelo nome
-    product = product_repo.get_product_by_id(product_name)
+    product = product_repo.get_product_by_name(product_name)
     if not product:
         raise HTTPException(status_code=404, detail="Produto não encontrado")
 
@@ -139,11 +138,11 @@ def purchase_product_by_name(product_name: str, purchase_data: PurchaseProduct, 
 
     try:
         # Realizar a compra
-        product = product_repo.reduce_stock(product.id, purchase_data.quantity)
+        product = product_repo.reduce_stock(product.name, purchase_data.quantity)
 
         # Se o estoque se esgotou, remover o produto da lista de produtos
         if product.quantity_in_stock <= 0:
-            product_repo.delete_product(product.id)
+            product_repo.delete_product(product.name)
 
         return product.to_dict()
     except ValueError as ve:

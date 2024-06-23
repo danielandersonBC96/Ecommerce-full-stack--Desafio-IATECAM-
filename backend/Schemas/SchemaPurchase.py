@@ -2,7 +2,7 @@
 from pydantic import BaseModel
 
 class PurchaseProduct(BaseModel):
-    product_id: int
+    name: str
     quantity: int
 
 
