@@ -1,13 +1,21 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
-from typing import List, Optional
+from typing import List, Optional,Dict, Any 
 
 from Schemas.SchemaProduct import Product, CreateProduct, UpdateProduct  # Corrigido o import
 from Config.database import get_db
-from Repositories.RepositoriesProduct import ProductRepository
 import httpx
+from Schemas.SchemaCategory import Category,CreateCategory
+from Repositories.RepositoriesProduct import ProductRepository
+from Repositories.RepositoriesCategory import CategoryRepository
 
-router = APIRouter()
+
+
+router = APIRouter(
+
+    prefix="/Produtos and Categories",
+    tags=["Product and Category"]
+)
 
 # Função para buscar a cotação do dólar
 def fetch_usd_brl_rate():
@@ -69,20 +77,51 @@ def delete_product(product_id: int, db: Session = Depends(get_db)):
     product_repo.delete_product(product_id)
     return {"detail": "Produto deletado"}
 
-@router.get("/products/search", response_model=Optional[Product])  # Corrigido o caminho da rota e o response_model
+
+@router.get("/products/search", response_model=List[Product])
 def search_product_by_name(name: str = Query(..., min_length=1), db: Session = Depends(get_db)):
     product_repo = ProductRepository(db)
-    product = product_repo.search_product_by_name(name)
+    products = product_repo.search_products_by_name(name)
 
-    if not product:
-        raise HTTPException(status_code=404, detail="Produto não encontrado")
+    if not products:
+        raise HTTPException(status_code=404, detail="Produtos não encontrados")
 
     usd_brl_rate = fetch_usd_brl_rate()
     if usd_brl_rate is None:
         raise HTTPException(status_code=500, detail="Erro ao buscar a taxa de câmbio")
 
-    product.price_in_dollar = product.price_in_real / usd_brl_rate
-    product.status = get_product_status(product)
+    for product in products:
+        product.price_in_dollar = product.price_in_real / usd_brl_rate
+        product.status = get_product_status(product)
 
-    return product
+    return products
+
+
+@router.post("/categories/", response_model=Category)
+def create_category(category_data: CreateCategory, db: Session = Depends(get_db)):
+    category_repo = CategoryRepository(db)
+    new_category = category_repo.create_category(category_data.name, category_data.description)
+    return new_category
+
+
+    category = products[0].category
+    return CategoryResponse(id=category.id, name=category.name, products=products)
+
+
+
+@router.get("/products/filte  Cetegories and Description", response_model=List[Product])
+def search_products(category_id: Optional[str] = None, description: Optional[str] = None, db: Session = Depends(get_db)):
+    product_repo = ProductRepository(db)
+
+    category_ids = None
+    if category_id:
+        category_ids = [category_id]
+
+    products = product_repo.search_products_by_criteria(category_ids, description)
+    return products
+
+
+
+
+
 

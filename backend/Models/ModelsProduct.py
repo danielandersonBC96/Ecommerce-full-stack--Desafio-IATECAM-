@@ -14,10 +14,10 @@ class Product(Base):
     image_url = Column(String)  # Coluna para armazenar a URL da imagem externa
     quantity_in_stock = Column(Integer)
     price_in_real = Column(Float)
-    category_id = Column(Integer, ForeignKey('categories.id'))
+    category_id = Column(String, ForeignKey('categories.id'))
 
     # Define relationships
-    category = relationship('Category', back_populates='products', lazy='joined')
+    category = relationship("Category", backref="products")
     storages = relationship('Storage', back_populates='product', lazy='joined')
     sales_by_product = relationship('SalesByProduct', back_populates='product', lazy='joined')
 
