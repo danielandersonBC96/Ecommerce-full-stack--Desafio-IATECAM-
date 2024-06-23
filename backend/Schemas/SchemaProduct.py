@@ -17,6 +17,7 @@ class UpdateProduct(ProductBase):
 
 class Product(ProductBase):
     id: int
+    available: Optional[bool] = True  # Campo opcional para indicar disponibilidade do produto
 
     class Config:
         orm_mode = True

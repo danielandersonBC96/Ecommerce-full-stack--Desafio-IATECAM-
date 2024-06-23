@@ -7,9 +7,10 @@ from Config.database import get_db
 import httpx
 from Schemas.SchemaCategory import Category,CreateCategory
 from Repositories.RepositoriesProduct import ProductRepository
-from Repositories.RepositoriesCategory import CategoryRepository
+from Repositories.RepositoriesCategory import CategoryRepository 
 
-
+from Schemas.SchemaPurchase import PurchaseProduct 
+from Models.ModelsUser import User
 
 router = APIRouter(
 
@@ -121,7 +122,31 @@ def search_products(category_id: Optional[str] = None, description: Optional[str
     return products
 
 
+@router.post("/products/{product_name}/purchase", response_model=Product)
+def purchase_product_by_name(product_name: str, purchase_data: PurchaseProduct, db: Session = Depends(get_db)):
+    product_repo = ProductRepository(db)
 
+    # Buscar o produto pelo nome
+    product = product_repo.get_product_by_id(product_name)
+    if not product:
+        raise HTTPException(status_code=404, detail="Produto não encontrado")
 
+    # Verificar se a quantidade desejada está disponível em estoque
+    if purchase_data.quantity <= 0:
+        raise HTTPException(status_code=400, detail="Quantidade inválida. Deve ser maior que zero.")
+    if purchase_data.quantity > product.quantity_in_stock:
+        raise HTTPException(status_code=400, detail=f"Quantidade solicitada maior que a disponível em estoque ({product.quantity_in_stock}).")
 
+    try:
+        # Realizar a compra
+        product = product_repo.reduce_stock(product.id, purchase_data.quantity)
 
+        # Se o estoque se esgotou, remover o produto da lista de produtos
+        if product.quantity_in_stock <= 0:
+            product_repo.delete_product(product.id)
+
+        return product.to_dict()
+    except ValueError as ve:
+        raise HTTPException(status_code=400, detail=str(ve))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Erro interno ao processar a compra do produto.")

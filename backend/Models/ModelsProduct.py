@@ -14,7 +14,7 @@ class Product(Base):
     image_url = Column(String)  # Coluna para armazenar a URL da imagem externa
     quantity_in_stock = Column(Integer)
     price_in_real = Column(Float)
-    category_id = Column(String, ForeignKey('categories.id'))
+    category_id = Column(Integer, ForeignKey('categories.id'))
 
     # Define relationships
     category = relationship("Category", backref="products")
@@ -42,5 +42,6 @@ class Product(Base):
             "image_url": self.image_url,
             "quantity_in_stock": self.quantity_in_stock,
             "price_in_real": self.price_in_real,
-            "category": self.category.name if self.category else None,  
+            "category_id": self.category_id,  # Certifique-se de incluir category_id aqui
+            "category": self.category.name if self.category else None,
         }

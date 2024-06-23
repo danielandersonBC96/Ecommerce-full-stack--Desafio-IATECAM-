@@ -1,5 +1,8 @@
 from sqlalchemy.orm import Session
 from Models.ModelsProduct import Product
+from Models.ModelsStorage import Storage
+from Models.ModelsUser import User
+from typing import List, Optional
 
 class ProductRepository:
     def __init__(self, db: Session):
@@ -48,3 +51,34 @@ class ProductRepository:
             query = query.filter(Product.description.ilike(f"%{description}%"))
 
         return query.all()
+
+    
+    def reduce_stock(self, product_id: int, quantity: int):
+        # Obter o produto do banco de dados
+        product = self.get_product_by_id(product_id)
+
+        if not product:
+            raise ValueError("Produto não encontrado")
+
+        if quantity <= 0:
+            raise ValueError("Quantidade inválida. Deve ser maior que zero.")
+
+        if product.quantity_in_stock == 0:
+            raise ValueError("Produto fora de estoque.")
+
+        if quantity > product.quantity_in_stock:
+            raise ValueError(f"Quantidade solicitada maior que a disponível em estoque ({product.quantity_in_stock}).")
+
+        # Atualizar a quantidade em estoque
+        product.quantity_in_stock -= quantity
+
+        # Verificar se o estoque esgotou
+        if product.quantity_in_stock <= 0:
+            # Remover o produto do banco de dados se o estoque esgotou
+            self.db.delete(product)
+        else:
+            # Caso contrário, apenas salvar as alterações
+            self.db.commit()
+
+        # Retornar o produto atualizado
+        return product

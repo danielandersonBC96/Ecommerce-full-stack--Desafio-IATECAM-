@@ -4,7 +4,7 @@ from Models.ModelsTag import Tag as SalesByTagModel
 from Repositories.main import AbstractRepository
 from Schemas.SchemaTag import SalesByTag, CreateTag
 
-class StorageRepository(AbstractRepository[SalesByTagModel]):
+class StorageRepository:
     """
     Repository class for handling CRUD operations related to SalesByTag entities.
     """

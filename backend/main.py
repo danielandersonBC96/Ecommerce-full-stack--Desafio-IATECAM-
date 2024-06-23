@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
-from Routers import  user, analytics, tag, output, storage, sse 
+from Routers import  user, analytics, tag, output, ProductCategory, sse 
 from Config.database import create_tables, get_db
 
 app = FastAPI()
@@ -32,7 +32,7 @@ app.include_router(user.router)
 app.include_router(analytics.router)
 app.include_router(tag.router)
 app.include_router(output.router)
-app.include_router(storage.router)
+app.include_router(ProductCategory.router)
 app.include_router(sse.router)
 
 
