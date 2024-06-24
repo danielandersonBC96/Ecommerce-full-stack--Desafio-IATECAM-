@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
+from datetime import datetime
 from Config.database import Base
 from Models.ModelsProduct import Product
 from Models.ModelsTag import Tag 
@@ -16,9 +17,10 @@ class Storage(Base):
     product_id = Column(Integer, ForeignKey('products.id'), nullable=False, index=True)
     tag_id = Column(Integer, ForeignKey('tags.id'), nullable=False, index=True)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False, index=True)
+    created_at = Column(DateTime, default=datetime.now)
 
     # Define relationships
-    product = relationship("Product",  back_populates="storages", lazy="joined")
+    product = relationship("Product", back_populates="storages", lazy="joined")
     tag = relationship("Tag", back_populates="storages", lazy="joined")
     user = relationship("User", back_populates="storages", lazy="joined")
     outputs = relationship("Output", back_populates="storage", lazy="joined")
@@ -37,5 +39,6 @@ class Storage(Base):
             "amount": self.amount,
             "product_id": self.product_id,
             "tag_id": self.tag_id,
-            "user_id": self.user_id
+            "user_id": self.user_id,
+            "created_at": self.created_at.strftime("%Y-%m-%d %H:%M:%S") if self.created_at else None
         }

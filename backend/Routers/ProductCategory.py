@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from typing import List, Optional,Dict, Any 
-
+from Models.ModelsStorage import Storage
 from Schemas.SchemaProduct import Product, CreateProduct, UpdateProduct  # Corrigido o import
 from Config.database import get_db
 import httpx
@@ -122,30 +122,26 @@ def search_products(category_id: Optional[str] = None, description: Optional[str
     return products
 
 @router.post("/{product_name}/purchase", response_model=Product)
-def purchase_product_by_name(product_name: str, purchase_data: PurchaseProduct, db: Session = Depends(get_db)):
+def purchase_product_by_name(
+    product_name: str,
+    purchase_data: PurchaseProduct,
+    user_id: int,
+    db: Session = Depends(get_db)
+):
     product_repo = ProductRepository(db)
-
-    # Buscar o produto pelo nome
-    product = product_repo.get_product_by_name(product_name)
-    if not product:
-        raise HTTPException(status_code=404, detail="Produto não encontrado")
-
-    # Verificar se a quantidade desejada está disponível em estoque
-    if purchase_data.quantity <= 0:
-        raise HTTPException(status_code=400, detail="Quantidade inválida. Deve ser maior que zero.")
-    if purchase_data.quantity > product.quantity_in_stock:
-        raise HTTPException(status_code=400, detail=f"Quantidade solicitada maior que a disponível em estoque ({product.quantity_in_stock}).")
 
     try:
         # Realizar a compra
-        product = product_repo.reduce_stock(product.name, purchase_data.quantity)
+        product = product_repo.reduce_stock(product_name, purchase_data.quantity, user_id)
 
         # Se o estoque se esgotou, remover o produto da lista de produtos
         if product.quantity_in_stock <= 0:
-            product_repo.delete_product(product.name)
+            product_repo.delete_product(product.id)
 
-        return product.to_dict()
+        return product  # Certifique-se de retornar o objeto produto correto
     except ValueError as ve:
         raise HTTPException(status_code=400, detail=str(ve))
     except Exception as e:
+        print(f"Erro interno ao processar a compra do produto: {e}")  # Adicione esta linha para exibir o erro no terminal
         raise HTTPException(status_code=500, detail="Erro interno ao processar a compra do produto.")
+

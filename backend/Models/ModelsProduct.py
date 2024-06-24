@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String, Text, Float, ForeignKey
 from sqlalchemy.orm import relationship
 from Config.database import Base
 from Models.ModelsCategory import Category
+from Models.ModelsUser import User
 
 class Product(Base):
     """
@@ -9,18 +10,20 @@ class Product(Base):
     """
     __tablename__ = 'products'
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True)
-    description = Column(Text)
-    image_url = Column(String)  # Coluna para armazenar a URL da imagem externa
-    quantity_in_stock = Column(Integer)
-    price_in_real = Column(Float)
-    category_id = Column(Integer, ForeignKey('categories.id'))
-
+    name = Column(String, nullable=False)
+    description = Column(String, nullable=False)
+    image_url = Column(String, nullable=True)
+    quantity_in_stock = Column(Integer, nullable=False)
+    price_in_real = Column(Float, nullable=False)
+    category_id = Column(Integer, ForeignKey('categories.id'), nullable=False)
+    user_id = Column(String, ForeignKey('users.id'), nullable=False)
     # Define relationships
     category = relationship("Category", backref="products")
     storages = relationship('Storage', back_populates='product', lazy='joined')
     sales_by_product = relationship('SalesByProduct', back_populates='product', lazy='joined')
-
+    user_id = Column(Integer, ForeignKey('users.id'))
+    user = relationship("User", backref="products")
+   
     def __repr__(self) -> str:
         """
         Returns a string representation of the Product object.
@@ -44,4 +47,5 @@ class Product(Base):
             "price_in_real": self.price_in_real,
             "category_id": self.category_id,  # Certifique-se de incluir category_id aqui
             "category": self.category.name if self.category else None,
+            "user": self.name_user
         }

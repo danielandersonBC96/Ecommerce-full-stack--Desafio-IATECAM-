@@ -37,11 +37,10 @@ class ProductRepository:
             self.db.delete(product)
             self.db.commit()
 
-    def search_products_by_name(self, name: str) -> list[Product]:
+    def search_products_by_name(self, name: str) -> List[Product]:
         return self.db.query(Product).filter(Product.name.ilike(f"%{name}%")).all()
      
-
-    def search_products_by_criteria(self, category_ids: list = None, description: str = None) -> list[Product]:
+    def search_products_by_criteria(self, category_ids: List[int] = None, description: str = None) -> List[Product]:
         query = self.db.query(Product)
 
         if category_ids:
@@ -52,11 +51,10 @@ class ProductRepository:
 
         return query.all()
 
-    
-    def get_product_by_name(self, product_name: str) -> Optional[Product]:
+    def get_product_by_name(self, product_name: str) -> Product:
         return self.db.query(Product).filter(Product.name == product_name).first()
 
-    def reduce_stock(self, product_name: str, quantity: int) -> Product:
+    def reduce_stock(self, product_name: str, quantity: int, user_id: int) -> Product:
         # Obter o produto do banco de dados pelo nome
         product = self.get_product_by_name(product_name)
 
@@ -72,16 +70,34 @@ class ProductRepository:
         if quantity > product.quantity_in_stock:
             raise ValueError(f"Quantidade solicitada maior que a disponível em estoque ({product.quantity_in_stock}).")
 
-        # Atualizar a quantidade em estoque
-        product.quantity_in_stock -= quantity
+        try:
+            # Atualizar a quantidade em estoque
+            product.quantity_in_stock -= quantity
 
-        # Verificar se o estoque esgotou
-        if product.quantity_in_stock <= 0:
-            # Remover o produto do banco de dados se o estoque esgotou
-            self.db.delete(product)
-        else:
-            # Caso contrário, apenas salvar as alterações
+            # Criar um novo registro de compra na tabela 'storages'
+            storage = Storage(
+                price=product.price_in_real,
+                description=product.description,
+                amount=quantity,
+                product_id=product.id,
+                tag_id=1,  # Ajuste este valor conforme necessário
+                user_id=user_id
+            )
+            self.db.add(storage)
+
+            # Verificar se o estoque esgotou
+            if product.quantity_in_stock <= 0:
+                # Remover o produto do banco de dados se o estoque esgotou
+                self.db.delete(product)
+            else:
+                # Caso contrário, apenas salvar as alterações
+                self.db.commit()
+
+            # Salvar a transação na tabela 'storages'
             self.db.commit()
 
-        # Retornar o produto atualizado
-        return product 
+            # Retornar o produto atualizado
+            return product
+        except Exception as e:
+            self.db.rollback()
+            raise e
