@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:80/auth';
+  private apiUrl = 'http://localhost:8000/users';
 
   constructor(private http: HttpClient) { }
 
@@ -14,22 +14,26 @@ export class AuthService {
     return sessionStorage.getItem("access_token");
   }
 
-  register(name: string, username: string, password: string) {
+  register(name: string, username: string, password: string): Observable<any> {
     const data = {
       name,
       username,
       password
-    }
-    return this.http.post(`${this.apiUrl}/register`, data)
+    };
+    return this.http.post(`${this.apiUrl}/createuser`, data);
   }
 
   login(username: string, password: string): Observable<any> {
-    const formData = new FormData();
+    const data = {
+      username,
+      password
+    };
 
-    formData.append('username', username);
-    formData.append('password', password);
-
-    return this.http.post(`${this.apiUrl}/login`, formData);
+    return this.http.post(`${this.apiUrl}/login`, data, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    });
   }
 
   logout(): void {

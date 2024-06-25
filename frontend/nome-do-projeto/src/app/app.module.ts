@@ -24,7 +24,8 @@ import { MessageService } from 'primeng/api';
     AppRoutingModule,
     AppComponentsModule,
     HttpClientModule,
-    ToastModule
+    ToastModule,
+    AppComponentsModule
   ],
   providers: [
     {

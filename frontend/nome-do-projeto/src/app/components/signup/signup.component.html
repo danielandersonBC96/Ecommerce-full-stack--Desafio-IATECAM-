@@ -1,22 +1,18 @@
 <div class="center-container">
-
-    <h1> Let's create your account ?</h1>
+    <h1>Let's create your account</h1>
     <div class="signup-container">
-        
-        <h1> SingUp</h1>
-        <form (ngSubmit)="signup()" #signupForm="ngForm" class="form-container">
+        <h1>Sign Up</h1>
+        <form (ngSubmit)="signup(signupForm)" #signupForm="ngForm" class="form-container">
             <div class="p-field">
-                
                 <input type="text" id="name" placeholder="name" name="name" pInputText [(ngModel)]="name" required />
             </div>
             <div class="p-field">
-                
                 <input type="text" id="username" placeholder="username" name="username" pInputText [(ngModel)]="username" required />
             </div>
             <div class="p-field">
-                <input type="password" id="password"  placeholder="password" pInputText [(ngModel)]="password" required />
+                <input type="password" id="password" placeholder="password" name="password" pInputText [(ngModel)]="password" required />
             </div>
-            <button class="submit"  pButton label="Sign Up"></button>
+            <button class="submit" pButton label="Sign Up"></button>
         </form>
     </div>
 </div>

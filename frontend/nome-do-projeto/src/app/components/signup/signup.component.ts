@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
-import { AuthService } from 'src/app/services/auth/auth.service';
+import { AuthService } from '../../services/auth/auth.service';
+import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-signup',
@@ -10,24 +13,26 @@ export class SignupComponent {
   name: string = '';
   username: string = '';
   password: string = '';
-  accountType: string = '';
 
-  constructor(private authService: AuthService) { }
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private messageService: MessageService
+  ) { }
 
-  signup() {
-    console.log('Name:', this.name);
-    console.log('Username:', this.username);
-    console.log('Password:', this.password);
-    this.authService.register(this.name, this.username, this.password).subscribe(
-      {
+  signup(signupForm: NgForm) {
+    if (signupForm.valid) {
+      this.authService.register(this.name, this.username, this.password).subscribe({
         next: (response) => {
-          console.log("User created succesfully", response);
+          console.log("User registration successful", response);
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Account created successfully' });
+          this.router.navigate(["/login"]);
         },
         error: (error) => {
-          console.log("Error to create user", error);
+          console.log("Error during registration", error);
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Registration failed' });
         }
-      }
-    )
-
+      });
+    }
   }
 }
