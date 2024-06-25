@@ -1,33 +1,113 @@
+/* Container styling */
 .login-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    height: 200vh;
+    color: white;
+    background: linear-gradient(135deg, #2e3783 0%, rgb(44, 2, 233));
+    padding: 1em;
 }
 
+/* Form styling */
 .login-container form {
+    background-color: rgb(44, 2, 233);
     text-align: center;
-    border: 1px solid grey;
+    border: 1px solid rgba(255, 255, 255, 0.986);
     padding: 2em;
     border-radius: 10px;
+    box-shadow: 0 4px 15px  white;
+    transition: all 0.3s ease-in-out;
+    width: 100%;
+    max-width: 400px;
 }
 
+
+/* Form hover effect */
+.login-container form:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Spacing between form elements */
 .login-container>form>div {
-    margin-bottom: 1em;
+    margin-bottom: 1.5em;
 }
 
+/* Paragraph styling */
 .login-container p {
     text-align: center;
 }
 
+/* Field styling */
 .p-field {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 1em;
+    gap: 0.5em;
+    padding: 10px;
+    width: 100%;
 }
 
 .p-field>label {
     justify-content: flex-start;
+    font-weight: bold;
+}
+
+/* Input styling */
+.p-field input {
+    width: 100%;
+    padding: 0.75em;
+    border: 1px solid rgb(255, 255, 255);
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.993);
+    color: black;  /* Change text color to black for better contrast */
+}
+
+/* Button styling */
+.p-field button {
+    padding: 0.75em 1.5em;
+    border: 2px solid #004e92;  /* Blue border */
+    border-radius: 5px;
+    background-color: white;  /* White background */
+    color: #004e92;  /* Blue text */
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.p-field button:hover {
+    background-color: #004e92;  /* Blue background on hover */
+    color: white;  /* White text on hover */
+
+}
+
+.submit {
+    padding: 0.75em 1.5em;
+    border: none;
+    border-radius: 5px;
+    background-color: transparent;
+    color: #004e92;
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 1em;
+    transition: color 0.3s ease;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 600px) {
+    .login-container form {
+        width: 100%;
+        padding: 1.5em;
+    }
+}
+
+@media (max-width: 400px) {
+    .p-field {
+        gap: 0.5em;
+    }
+
+    .p-field button {
+        width: 100%;
+        padding: 0.75em;
+    }
 }

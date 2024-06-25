@@ -1,12 +1,16 @@
 <div class="login-container">
+
+    <h1> WallSmart Iatecam</h1>
     <form #loginForm="ngForm" (ngSubmit)="login(loginForm)">
+
+        <h1> Login</h1>
         <div class="p-field">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" pInputText [(ngModel)]="username" required />
+            
+            <input type="text" id="username" name="username:" placeholder="username:" pInputText [(ngModel)]="username" required />
         </div>
         <div class="p-field">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" pInputText [(ngModel)]="password" required />
+            
+            <input type="password" id="password"  placeholder="password" name="password"   [(ngModel)]="password" required />
         </div>
         <button type="submit" pButton label="Login"></button>
     </form>
