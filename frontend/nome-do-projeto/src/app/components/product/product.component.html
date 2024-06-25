@@ -1,0 +1,45 @@
+<div class="product-container">
+    <form #productForm="ngForm" (ngSubmit)=" createProduct(productForm)">
+        <div class="p-inputgroup">
+            <span class="p-inputgroup-addon">
+                <i class="pi pi-shopping-cart"></i>
+            </span>
+            <input type="text" id="name" name="name" [(ngModel)]="product.product_name" required pInputText
+                placeholder="Product Name" />
+        </div>
+
+
+        <div class="p-inputgroup">
+            <span class="p-inputgroup-addon">
+                <i class="pi pi-tag"></i>
+            </span>
+            <input type="text" id="tag" name="tag" [(ngModel)]="product.tag_name" required pInputText
+                placeholder="Product Tag" />
+        </div>
+
+        <div class="p-inputgroup">
+            <span class="p-inputgroup-addon">
+                <i class="pi pi-dollar"></i>
+            </span>
+            <input type="text" id="price" name="price" [(ngModel)]="product.price" required pInputText
+                placeholder="Product Price" />
+        </div>
+
+        <div class="p-inputgroup">
+            <span class="p-inputgroup-addon">
+                <i class="pi pi-shopping-cart"></i>
+            </span>
+            <input type="number" id="amount" name="amount" [(ngModel)]="product.amount" required pInputText
+                placeholder="Product Amount" />
+        </div>
+
+        <div class="p-inputgroup">
+            <span class="p-inputgroup-addon">
+                <i class="pi pi-comment"></i>
+            </span>
+            <textarea id="description" name="description" [(ngModel)]="product.description" pInputTextarea
+                placeholder="Product Description" required=""></textarea>
+        </div>
+        <button type="submit" pButton label="Create" [disabled]="productForm.invalid"></button>
+    </form>
+</div>

@@ -1,0 +1,19 @@
+.product-container>form {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.dropdown {
+    display: flex;
+    width: 100%;
+}
+
+.input-dropdown {
+    display: flex;
+    width: 100%;
+}
+
+p-dropdown {
+    width: 100%;
+}
