@@ -8,7 +8,7 @@ import { Chart } from '../../interfaces/chart.interface';
   providedIn: 'root'
 })
 export class ChartService {
-  private apiUrl = "http://localhost:80/analytics"
+  private apiUrl = "http://localhost:8000/analytics"
 
   constructor(private http: HttpClient) { }
 
