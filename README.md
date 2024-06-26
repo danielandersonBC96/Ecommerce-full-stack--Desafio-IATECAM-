@@ -1,1 +1,1 @@
-api fast api como rodas dentro da pasta back end lig a vm  venv\Scripts\activate  , inicie o projeto com  o comando  uvicorn main:app --reload    , para doda o fron  dentro do projeto nome-do-projeto ng serve
+api fast api como roda, dentro da pasta back end liga vm , venv\Scripts\activate  , inicie o projeto com  o comando  uvicorn main:app --reload    , para rodar o front  dentro da pasta do projeto nome-do-projeto ng serve
