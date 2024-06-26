@@ -7,7 +7,7 @@ import { CreateOutput, Output } from '../../interfaces/output.interface'
   providedIn: 'root'
 })
 export class OutputService {
-  private apiUrl = "http://localhost:80/outputs";
+  private apiUrl = "http://localhost:8000/outputs";
 
   constructor(private http: HttpClient) { }
 
