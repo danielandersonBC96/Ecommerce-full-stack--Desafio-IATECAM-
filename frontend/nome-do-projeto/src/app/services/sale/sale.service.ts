@@ -9,7 +9,7 @@ import { Sale } from '../../interfaces/sale.interface';
 })
 export class SaleService {
 
-  private apiUrl = "http://localhost:80/outputs"
+  private apiUrl = "http://localhost:8000/outputs"
 
   constructor(private http: HttpClient) { }
 
