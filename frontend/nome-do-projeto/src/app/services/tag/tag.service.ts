@@ -8,7 +8,7 @@ import { Tag, CreateTag } from '../../interfaces/tag.interface';
   providedIn: 'root'
 })
 export class TagService {
-  private apiUrl = "http://localhost:80/tags"
+  private apiUrl = "http://localhost:8000/tags"
 
   constructor(private http: HttpClient) { }
 
