@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class StorageService {
-  private apiUrl = "http://localhost:80/storages"
+  private apiUrl = "http://localhost:80000/storages"
 
   constructor(private http: HttpClient) { }
 
