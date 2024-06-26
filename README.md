@@ -1,0 +1,1 @@
+api fast api como rodas dentro da pasta back end lig a vm  venv\Scripts\activate  , inicie o projeto com  o comando  uvicorn main:app --reload    , para doda o fron  dentro do projeto nome-do-projeto ng serve
