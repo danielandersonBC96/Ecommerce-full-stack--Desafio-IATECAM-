@@ -4,4 +4,10 @@ docker coloque o nome do docker na frent da tag
 
 tag sqlite-container:latest danielfullstack/sqlite-container:latest
 tag nome-do-projeto:latest danielfullstack/nome-do-projeto:latest
-tag backend-app:latest danielfullstack/backend-app:latest
+tag backend-app:latest danielfullstack/backend-app:latest  
+
+docker hub :
+https://hub.docker.com/repository/docker/danielfullstack/sqlite-container/general
+https://hub.docker.com/repository/docker/danielfullstack/backend-app/general
+https://hub.docker.com/repository/docker/danielfullstack/nome-do-projeto/general
+
